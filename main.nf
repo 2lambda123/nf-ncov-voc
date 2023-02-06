@@ -12,6 +12,7 @@ params.functional_annotation = "$baseDir/assets/ncov_functionalAnnotation"
 params.gene_coordinates = "$baseDir/assets/ncov_geneCoordinates"
 params.mutation_names = "$baseDir/assets/ncov_multiNames"
 params.surveillance_indicators = "$baseDir/assets/ncov_surveillanceIndicators"
+params.pangolin_alias = "$baseDir/assets/ncov_pangolin_alias"
 
 
 // include modules
@@ -63,7 +64,7 @@ workflow {
       log.info cidgohHeader()
       log.info workflowHeader()
 
-      Channel.fromPath( "$params.pangolin_alais/pango_designation_alias_key_viralai.tsv", checkIfExists: true)
+      Channel.fromPath( "$params.pangolin_alias/pango_designation_alias_key_viralai.tsv", checkIfExists: true)
             .set{ ch_pangolin_alias }
       
       Channel.fromPath( "$params.ref_gff/*.gff3", checkIfExists: true)
