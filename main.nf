@@ -141,22 +141,23 @@ workflow {
 
         ch_metadata=Channel.empty()
         ch_voc=Channel.empty()
-        
-        if (params.skip_viralai)
+
+        if (params.skip_viralai){
           if(params.seq){
             Channel.fromPath( "$params.seq", checkIfExists: true)
-               .set{ ch_seq }
+              .set{ ch_seq }
           }
 
           if(params.meta){
             Channel.fromPath( "$params.meta", checkIfExists: true)
                .set{ ch_metadata }
           }
-        else(
+        }
+        else{
             viralaidata(ch_pangolin_alias)
             ch_metadata=viralaidata.out.ch_metadata
             ch_seq=viralaidata.out.ch_seq
-        )
+        }
 
 
         preprocessing(ch_metadata, ch_seq, ch_variant)
