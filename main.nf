@@ -21,6 +21,7 @@ include {workflowHeader         } from './modules/local/wf_header'
 
 
 // import workflows
+include {viralaidata            } from './workflows/covidmvp_viralai'
 include {preprocessing          } from './workflows/covidmvp_preprocessing'
 include {variant_calling        } from './workflows/covidmvp_variantcalling'
 include {annotation             } from './workflows/covidmvp_annotation'
@@ -62,16 +63,9 @@ workflow {
       log.info cidgohHeader()
       log.info workflowHeader()
 
-      if(params.seq){
-        Channel.fromPath( "$params.seq", checkIfExists: true)
-             .set{ ch_seq }
-      }
-
-      if(params.meta){
-        Channel.fromPath( "$params.meta", checkIfExists: true)
-             .set{ ch_metadata }
-      }
-
+      Channel.fromPath( "$params.pangolin_alais/pango_designation_alias_key_viralai.tsv", checkIfExists: true)
+            .set{ ch_pangolin_alias }
+      
       Channel.fromPath( "$params.ref_gff/*.gff3", checkIfExists: true)
             .set{ ch_refgff }
 
@@ -144,6 +138,23 @@ workflow {
       }
 
       if(params.mode == 'reference'){
+
+        if (params.skip_viralai)
+          if(params.seq){
+            Channel.fromPath( "$params.seq", checkIfExists: true)
+               .set{ ch_seq }
+          }
+
+          if(params.meta){
+            Channel.fromPath( "$params.meta", checkIfExists: true)
+               .set{ ch_metadata }
+          }
+        else(
+            viralaidata(ch_pangolin_alias)
+            ch_meatdata=viralaidata.out.ch_metadata
+            ch_seq=viralaidata.out.ch_seq
+        )
+
 
         preprocessing(ch_metadata, ch_seq, ch_variant)
         ch_voc=preprocessing.out.ch_voc

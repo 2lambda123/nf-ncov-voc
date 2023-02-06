@@ -1,0 +1,8 @@
+name: nf-ncov-voc-viralai
+dependencies:
+- python>=3.9
+- anaconda
+- pip3>=21.3
+- pip:
+  # works for regular pip packages
+  - dnastack-client-library==3.0.56a1648737133
