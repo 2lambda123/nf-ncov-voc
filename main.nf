@@ -151,7 +151,7 @@ workflow {
           }
         else(
             viralaidata(ch_pangolin_alias)
-            ch_meatdata=viralaidata.out.ch_metadata
+            ch_metadata=viralaidata.out.ch_metadata
             ch_seq=viralaidata.out.ch_seq
         )
 
