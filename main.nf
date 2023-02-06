@@ -176,10 +176,10 @@ workflow {
         ch_stats=annotation.out.ch_stats
 
         surveillance(ch_gvf_surveillance, ch_variant, ch_stats, ch_surveillanceIndicators, ch_metadata )
-        if(!params.skip_postprocessing){
-            POSTPROCESSING()
-        }
 
       }
+      if(!params.skip_postprocessing){
+            POSTPROCESSING()
+        }
 
 }

@@ -1,8 +1,7 @@
 process POSTPROCESSING {
 
   tag {"linking output files to rsync"}
-  input:
-    val go from surveillance.out.collect()
+
 
   script:
       """
