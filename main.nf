@@ -139,6 +139,9 @@ workflow {
 
       if(params.mode == 'reference'){
 
+        ch_metadata=Channel.empty()
+        ch_voc=Channel.empty()
+        
         if (params.skip_viralai)
           if(params.seq){
             Channel.fromPath( "$params.seq", checkIfExists: true)
