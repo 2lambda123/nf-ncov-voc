@@ -19,7 +19,7 @@ params.pangolin_alias = "$baseDir/assets/ncov_pangolin_alias"
 include {printHelp              } from './modules/local/help'
 include {cidgohHeader           } from './modules/local/header'
 include {workflowHeader         } from './modules/local/wf_header'
-
+include {POSTPROCESSING         } from './modules/local/post_processing'
 
 // import workflows
 include {viralaidata            } from './workflows/covidmvp_viralai'
@@ -176,6 +176,9 @@ workflow {
         ch_stats=annotation.out.ch_stats
 
         surveillance(ch_gvf_surveillance, ch_variant, ch_stats, ch_surveillanceIndicators, ch_metadata )
+        if(!skip_postprocessing){
+            POSTPROCESSING()
+        }
 
       }
 
