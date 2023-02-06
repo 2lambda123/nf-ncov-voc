@@ -9,7 +9,7 @@ process VIRALAIFASTA {
 
   script:
       """
-      viralai_fetch_fasta_url.py --seq fasta_drl.txt
+      viralai_fetch_multifasta.py --seq fasta_drl.txt
       dnastack files download -i fasta_drl.txt
       """
 }
