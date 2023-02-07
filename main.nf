@@ -179,7 +179,7 @@ workflow {
 
       }
       if(!params.skip_postprocessing){
-            POSTPROCESSING(surveillance.out.ch_surv)
+            POSTPROCESSING(surveillance.out.ch_surv.collect())
         }
 
 }
