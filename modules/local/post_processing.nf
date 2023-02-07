@@ -2,6 +2,8 @@ process POSTPROCESSING {
 
   tag {"linking output files to rsync"}
 
+  input:
+    val surveillance
 
   script:
       """
