@@ -1,9 +1,9 @@
 process VIRALAIMETADATA {
 
   tag {"FETCH_Metadata"}
-
-  publishDir "${params.outdir}/${params.prefix}/${task.process.replaceAll(":","_")}", pattern: "*.csv.gz", mode: 'copy'
   
+  publishDir "${params.outdir}/${params.prefix}/${task.process.replaceAll(":","_")}", pattern: "*.csv.gz", mode: 'copy'  
+
   input:
         path(alias_key)
   

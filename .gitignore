@@ -7,4 +7,12 @@ results/*
 .DS_store
 testing/*
 *.ipynb
-data/*
+latest_gvf/*
+latest_tsv/*
+latest_pdf/*
+bin/__pycache__/*
+weekly_data/*
+*.sh
+*.error
+*.out
+.gitignore

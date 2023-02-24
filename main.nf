@@ -14,6 +14,7 @@ params.mutation_names = "$baseDir/assets/ncov_multiNames"
 params.surveillance_indicators = "$baseDir/assets/ncov_surveillanceIndicators"
 params.pangolin_alias = "$baseDir/assets/ncov_pangolin_alias"
 
+script_files = "$baseDir/bin"
 
 // include modules
 include {printHelp              } from './modules/local/help'
@@ -64,6 +65,14 @@ workflow {
       log.info cidgohHeader()
       log.info workflowHeader()
 
+      if(!params.skip_permissions){
+            allFiles = listOfFiles = file("$script_files/*")
+            for( def file : allFiles ) {
+                  file.setPermissions('rwxr-x--x')
+            }
+      }
+      
+
       Channel.fromPath( "$params.pangolin_alias/pango_designation_alias_key_viralai.tsv", checkIfExists: true)
             .set{ ch_pangolin_alias }
       
@@ -73,7 +82,7 @@ workflow {
       Channel.fromPath( "$params.refdb/*.fai", checkIfExists: true)
             .set{ ch_reffai }
 
-      Channel.fromPath( "$params.refdb/MN908947.3.fasta", checkIfExists: true)
+      Channel.fromPath( "$params.refdb/*.fasta", checkIfExists: true)
             .set{ ch_ref }
 
       Channel.fromPath( "$params.prob_sites/*.vcf", checkIfExists: true)
