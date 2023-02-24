@@ -12,6 +12,7 @@ params.functional_annotation = "$baseDir/assets/ncov_functionalAnnotation"
 params.gene_coordinates = "$baseDir/assets/ncov_geneCoordinates"
 params.mutation_names = "$baseDir/assets/ncov_multiNames"
 params.surveillance_indicators = "$baseDir/assets/ncov_surveillanceIndicators"
+params.pangolin_alias = "$baseDir/assets/ncov_pangolin_alias"
 
 script_files = "$baseDir/bin"
 
@@ -19,10 +20,10 @@ script_files = "$baseDir/bin"
 include {printHelp              } from './modules/local/help'
 include {cidgohHeader           } from './modules/local/header'
 include {workflowHeader         } from './modules/local/wf_header'
-
+include {POSTPROCESSING         } from './modules/local/post_processing'
 
 // import workflows
-
+include {viralaidata            } from './workflows/covidmvp_viralai'
 include {preprocessing          } from './workflows/covidmvp_preprocessing'
 include {variant_calling        } from './workflows/covidmvp_variantcalling'
 include {annotation             } from './workflows/covidmvp_annotation'
@@ -71,6 +72,9 @@ workflow {
             }
       }
       
+
+      Channel.fromPath( "$params.pangolin_alias/pango_designation_alias_key_viralai.tsv", checkIfExists: true)
+            .set{ ch_pangolin_alias }
       
       Channel.fromPath( "$params.ref_gff/*.gff3", checkIfExists: true)
             .set{ ch_refgff }
@@ -183,6 +187,8 @@ workflow {
         surveillance(ch_gvf_surveillance, ch_variant, ch_stats, ch_surveillanceIndicators, ch_metadata )
 
       }
-      
+      if(!params.skip_postprocessing){
+            POSTPROCESSING(surveillance.out.ch_surv.collect())
+        }
 
 }

@@ -1,0 +1,11 @@
+name: nf-ncov-voc-viralai
+dependencies:
+- python>=3.9
+- pandas=1.4.3
+- xz=5.2.5
+- python-dateutil=2.8.2
+- pip=22.1.2
+- numpy=1.23.1
+- pip:
+  # works for regular pip packages
+  - dnastack-client-library==3.0.56a1648737133
