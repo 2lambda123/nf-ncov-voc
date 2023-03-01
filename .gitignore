@@ -12,3 +12,4 @@ weekly*
 *.out
 bin/__*
 *.sh
+latest*
