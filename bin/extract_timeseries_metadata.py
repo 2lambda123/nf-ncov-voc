@@ -54,7 +54,7 @@ def write_ids(dataframe, start_date, end_date):
 
 def write_metadata(dataframe, start_date, end_date):
     dataframe.to_csv( str(start_date)+ "_" + str(end_date) + 
-                     "_Metadata.csv.gz", sep="\t", compression='gzip',
+                     "_Metadata.tsv.gz", sep="\t", compression='gzip',
                      quoting=csv.QUOTE_NONE, index=False, header=True)
 
 
@@ -83,19 +83,16 @@ if __name__ == '__main__':
         edate = pd.to_datetime(args.enddate, format='%Y-%m-%d')
         window=args.window
 
-    #Metadata = Metadata[Metadata['sample_collection_date'].isin(pd.date_range(sdate, edate))]
-    #Metadata = Metadata.sort_values('sample_collection_date')
-    #Metadata = Metadata.reset_index()
     """ Filtering for human associated and consensus sequence of
         at least 29Kb """
-    print(len(Metadata))
+    #print(len(Metadata))
     Metadata = filter_metadata(dataframe=Metadata)
-    print(len(Metadata))
+    #print(len(Metadata))
     while sdate <= edate:
         query_date = sdate + pd.DateOffset(days=6)
-        print(sdate, query_date)
+        #print(sdate, query_date)
         sub_meta = Metadata.query('sample_collection_date >= @sdate and sample_collection_date <= @query_date')
-        print(len(sub_meta))
+        #print(len(sub_meta))
         sub_meta = sub_sampling(dataframe=sub_meta, subsampling=args.samplingsize)
         
         write_ids(dataframe=sub_meta, start_date=str(sdate)[:10], end_date=str(query_date)[:10])

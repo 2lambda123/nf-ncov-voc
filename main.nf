@@ -23,11 +23,14 @@ include {workflowHeader         } from './modules/local/wf_header'
 include {POSTPROCESSING         } from './modules/local/post_processing'
 
 // import workflows
-include {viralaidata            } from './workflows/covidmvp_viralai'
 include {preprocessing          } from './workflows/covidmvp_preprocessing'
 include {variant_calling        } from './workflows/covidmvp_variantcalling'
 include {annotation             } from './workflows/covidmvp_annotation'
 include {surveillance           } from './workflows/covidmvp_surveillance'
+
+// import viralai workflows
+include {viralaidata            } from './workflows/covidmvp_viralai_data'
+include {timeseries              } from './workflows/covidmvp_timeseries'
 
 if (params.help){
     log.info cidgohHeader()
@@ -185,10 +188,38 @@ workflow {
         ch_stats=annotation.out.ch_stats
 
         surveillance(ch_gvf_surveillance, ch_variant, ch_stats, ch_surveillanceIndicators, ch_metadata )
-
-      }
-      if(!params.skip_postprocessing){
+        
+        if(!params.skip_postprocessing){
             POSTPROCESSING(surveillance.out.ch_surv.collect())
         }
+      }
+
+      if(params.mode == 'timeseries'){
+
+        ch_metadata=Channel.empty()
+        
+
+        if (params.skip_viralai){
+          if(params.seq){
+            Channel.fromPath( "$params.seq", checkIfExists: true)
+              .set{ ch_seq }
+          }
+
+          if(params.meta){
+            Channel.fromPath( "$params.meta", checkIfExists: true)
+               .set{ ch_metadata }
+          }
+        }
+        else{
+            viralaidata(ch_pangolin_alias)
+            ch_metadata=viralaidata.out.ch_metadata
+            ch_seq=viralaidata.out.ch_seq
+        }
+        timeseries(ch_metadata, ch_seq, ch_ref, ch_refgff, ch_reffai, ch_probvcf, ch_geneannot, ch_funcannot, ch_genecoord, ch_mutationsplit, ch_variant)
+
+      }
+
+      
+      
 
 }
