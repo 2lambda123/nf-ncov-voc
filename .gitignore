@@ -13,3 +13,4 @@ weekly*
 bin/__*
 *.sh
 latest*
+data/*
